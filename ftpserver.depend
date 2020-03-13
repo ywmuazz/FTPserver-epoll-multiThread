@@ -1,0 +1,279 @@
+# depslib dependency file v1.0
+1582213955 source:/home/qyw/ftpserver/ftpserver/ftpproto.cpp
+	"ftpproto.h"
+	"sysutil.h"
+	"str.h"
+	"ftpcodes.h"
+	"tunable.h"
+	"privsock.h"
+	"common.h"
+
+1581829074 /home/qyw/ftpserver/ftpserver/ftpproto.h
+	"session.h"
+
+1582109475 /home/qyw/ftpserver/ftpserver/session.h
+	"common.h"
+
+1582126097 /home/qyw/ftpserver/ftpserver/common.h
+	<unistd.h>
+	<sys/wait.h>
+	<sys/types.h>
+	<pwd.h>
+	<shadow.h>
+	"crypt.h"
+	<fcntl.h>
+	<errno.h>
+	<signal.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<netdb.h>
+	<linux/capability.h>
+	<sys/syscall.h>
+	<sys/sendfile.h>
+	<time.h>
+	<sys/stat.h>
+	<dirent.h>
+	<sys/time.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
+1582109373 /home/qyw/ftpserver/ftpserver/sysutil.h
+	"common.h"
+
+1582109507 /home/qyw/ftpserver/ftpserver/str.h
+
+1581829186 /home/qyw/ftpserver/ftpserver/ftpcodes.h
+
+1582109380 /home/qyw/ftpserver/ftpserver/tunable.h
+	"common.h"
+
+1581837911 /home/qyw/ftpserver/ftpserver/privsock.h
+	"session.h"
+
+1582110080 source:/home/qyw/ftpserver/ftpserver/hash.cpp
+	"hash.h"
+	"common.h"
+
+1582109874 /home/qyw/ftpserver/ftpserver/hash.h
+	"common.h"
+
+1582269059 source:/home/qyw/ftpserver/ftpserver/main.cpp
+	"common.h"
+	"sysutil.h"
+	"session.h"
+	"str.h"
+	"tunable.h"
+	"parseconf.h"
+	"ftpproto.h"
+	"ftpcodes.h"
+	"hash.h"
+
+1581828977 /home/qyw/ftpserver/ftpserver/parseconf.h
+
+1582166146 source:/home/qyw/ftpserver/ftpserver/parseconf.cpp
+	"parseconf.h"
+	"common.h"
+	"tunable.h"
+	"str.h"
+
+1582268662 source:/home/qyw/ftpserver/ftpserver/privparent.cpp
+	"privparent.h"
+	"privsock.h"
+	"sysutil.h"
+	"tunable.h"
+
+1581838032 /home/qyw/ftpserver/ftpserver/privparent.h
+	"session.h"
+
+1582211471 source:/home/qyw/ftpserver/ftpserver/privsock.cpp
+	"privsock.h"
+	"common.h"
+	"sysutil.h"
+
+1582113297 source:/home/qyw/ftpserver/ftpserver/session.cpp
+	"common.h"
+	"session.h"
+	"ftpproto.h"
+	"privparent.h"
+	"privsock.h"
+	"sysutil.h"
+
+1582166226 source:/home/qyw/ftpserver/ftpserver/str.cpp
+	"str.h"
+	"common.h"
+
+1582256575 source:/home/qyw/ftpserver/ftpserver/sysutil.cpp
+	"sysutil.h"
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<netdb.h>
+
+1581907910 source:/home/qyw/ftpserver/ftpserver/tunable.cpp
+	"tunable.h"
+
+1584065866 source:/home/qyw/newftpserver/ftpproto.cpp
+	"ftpproto.h"
+	"sysutil.h"
+	"str.h"
+	"ftpcodes.h"
+	"tunable.h"
+	"privsock.h"
+	"common.h"
+	"epoll_util.h"
+
+1584001318 /home/qyw/newftpserver/ftpproto.h
+	"session.h"
+
+1584060441 /home/qyw/newftpserver/session.h
+	"common.h"
+
+1584066488 /home/qyw/newftpserver/common.h
+	<unistd.h>
+	<sys/wait.h>
+	<sys/types.h>
+	<pwd.h>
+	<shadow.h>
+	"crypt.h"
+	<fcntl.h>
+	<errno.h>
+	<signal.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<netdb.h>
+	<linux/capability.h>
+	<sys/syscall.h>
+	<sys/sendfile.h>
+	<pthread.h>
+	<string>
+	<time.h>
+	<sys/stat.h>
+	<dirent.h>
+	<sys/time.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
+1584066538 /home/qyw/newftpserver/sysutil.h
+	"common.h"
+
+1582109507 /home/qyw/newftpserver/str.h
+
+1581829186 /home/qyw/newftpserver/ftpcodes.h
+
+1582109380 /home/qyw/newftpserver/tunable.h
+	"common.h"
+
+1584007296 /home/qyw/newftpserver/privsock.h
+
+1583924078 source:/home/qyw/newftpserver/hash.cpp
+	"hash.h"
+	"common.h"
+
+1582109874 /home/qyw/newftpserver/hash.h
+	"common.h"
+
+1583924082 source:/home/qyw/newftpserver/main.cpp
+
+1581828977 /home/qyw/newftpserver/parseconf.h
+
+1582166146 source:/home/qyw/newftpserver/parseconf.cpp
+	"parseconf.h"
+	"common.h"
+	"tunable.h"
+	"str.h"
+
+1584007283 source:/home/qyw/newftpserver/privsock.cpp
+
+1584007423 source:/home/qyw/newftpserver/session.cpp
+	"common.h"
+	"session.h"
+	"ftpproto.h"
+	"privparent.h"
+	"privsock.h"
+	"sysutil.h"
+
+1584007297 /home/qyw/newftpserver/privparent.h
+
+1582166226 source:/home/qyw/newftpserver/str.cpp
+	"str.h"
+	"common.h"
+
+1584066625 source:/home/qyw/newftpserver/sysutil.cpp
+	"sysutil.h"
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<netdb.h>
+
+1581907910 source:/home/qyw/newftpserver/tunable.cpp
+	"tunable.h"
+
+1584007283 source:/home/qyw/newftpserver/privparent.cpp
+
+1583923555 source:/home/qyw/newftpserver/csapp.cpp
+	"csapp.h"
+
+1583923588 /home/qyw/newftpserver/csapp.h
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	<ctype.h>
+	<setjmp.h>
+	<signal.h>
+	<sys/time.h>
+	<sys/types.h>
+	<sys/wait.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<sys/mman.h>
+	<errno.h>
+	<math.h>
+	<pthread.h>
+	<semaphore.h>
+	<sys/socket.h>
+	<netdb.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+
+1584006011 source:/home/qyw/newftpserver/epoll_util.cpp
+	"epoll_util.h"
+
+1583940359 /home/qyw/newftpserver/epoll_util.h
+	<unistd.h>
+	<sys/types.h>
+	<sys/epoll.h>
+	<fcntl.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<assert.h>
+	<sys/stat.h>
+	<string.h>
+	<pthread.h>
+	<stdio.h>
+	<stdlib.h>
+	<sys/mman.h>
+	<stdarg.h>
+	<errno.h>
+	"csapp.h"
+
+1584066663 source:/home/qyw/newftpserver/ftpepoll.cpp
+	"common.h"
+	"sysutil.h"
+	"session.h"
+	"str.h"
+	"tunable.h"
+	"parseconf.h"
+	"ftpproto.h"
+	"ftpcodes.h"
+	"hash.h"
+	"csapp.h"
+	"epoll_util.h"
+
