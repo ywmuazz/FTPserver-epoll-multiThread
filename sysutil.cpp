@@ -470,6 +470,13 @@ int unlock_file(int fd) {
 
 static struct timeval s_curr_time;
 
+int getTimeStamp(long& sec,long& usec){
+    if(gettimeofday(&s_curr_time,NULL)<0)ERR_EXIT("gettimeofday");
+    sec=s_curr_time.tv_sec;
+    usec=s_curr_time.tv_usec;
+    return 0;
+}
+
 long get_time_sec() {
     if(gettimeofday(&s_curr_time,NULL)<0)ERR_EXIT("gettimeofday");
     return s_curr_time.tv_sec;

@@ -28,6 +28,18 @@ int closeSess(session_t*);
 
 //session_t* sessions[MAX_SESSIONS]= {0};
 edata_t sessinfo[MAX_SESSIONS]= {0};
+toNode* map_fd_toNode[MAX_SESSIONS];
+int linkMRU(toNode* node);
+int unlinkNode(toNode* node);
+int refreshTimeout(int fd);
+int addtoNode(session_t* sess);
+int epoll_wait_timeout(int epfd, struct epoll_event* events, int maxevents);
+
+toNode* pMRU=NULL;
+toNode* pLRU=NULL;
+
+
+
 
 int main() {
 
@@ -78,8 +90,6 @@ int main() {
     signal(SIGCHLD,handle_sigchld);
     ///监听cmd连接的socket
     int listenfd=tcp_server(tunable_listen_address,tunable_listen_port);
-    int conn;
-    pid_t pid;
     struct sockaddr_in addr;
     socklen_t scklen=sizeof(sockaddr);
 
@@ -89,12 +99,13 @@ int main() {
     fd_t* fdt=(fd_t*)malloc(sizeof(fd_t));
     fdt->fd=listenfd;
     fdt->type=0;
-    sessinfo[listenfd]={fdt,NULL};
+    sessinfo[listenfd]= {fdt,NULL};
     addFdData(epollfd,listenfd,&sessinfo[listenfd],false);
-//    addfd(epollfd,listenfd,false);//监听读
     int allcnt=0;
+
+
     for(;;) {
-        int eventnum=Epoll_wait(epollfd,events,MAXEVENTNUM,-1);
+        int eventnum=epoll_wait_timeout(epollfd,events,MAXEVENTNUM);
         for(int i=0; i<eventnum; i++) {
             edata_t* pedat=(edata_t*)(events[i].data.ptr);
             int sockfd=pedat->fd_in->fd;
@@ -116,7 +127,8 @@ int main() {
                     printf("监听事件数:%d\n",allcnt);
 
                 }
-            }else if(events[i].events&EPOLLIN) {
+            } else if(events[i].events&EPOLLIN) {
+                refreshTimeout(sockfd);
                 int res=processRead(pedat);
                 if(res==STATUS_WRITE)
                     modfd(epollfd,sockfd,EPOLLOUT);
@@ -128,7 +140,7 @@ int main() {
                     modfd(epollfd,sockfd,EPOLLIN);
                 else if(res==STATUS_RM)
                     removefd(epollfd,sockfd);
-            }else if(events[i].events&EPOLLHUP){
+            } else if(events[i].events&EPOLLHUP) {
                 closeSess(sess);
             }
 
@@ -137,7 +149,83 @@ int main() {
     return 0;
 }
 
-void beginSession(session_t* sess){
+int sessTime(toNode* node) {
+    return get_time_sec()-node->lastTime;
+}
+
+bool isTimeout(toNode* node) {
+    return sessTime(pLRU)+TIMEOUTSEG>tunable_idle_session_timeout;
+}
+int removeToNode(toNode* rmNode) {
+    map_fd_toNode[rmNode->sess->ctrl_fd]=NULL;
+    closeSess(rmNode->sess);
+    unlinkNode(rmNode);
+    free(rmNode);
+    return 0;
+}
+
+///认为只要返回0个事件，即是超时无事件,返回>0个事件，即为未超时就返回事件.
+///不认为在超时的时间点会恰好有事件返回.
+int epoll_wait_timeout(int epfd, struct epoll_event* events, int maxevents) {
+//    Epoll_wait(epollfd,events,MAXEVENTNUM,);
+    if(pLRU==NULL) {
+        return Epoll_wait(epfd,events,maxevents,-1);
+    } else {
+        int waitTime=tunable_idle_session_timeout-sessTime(pLRU);
+        int num=Epoll_wait(epfd,events,maxevents,waitTime);
+        if(num<0)return num;
+        else if(num>0)return num;
+        else {
+            while(pLRU!=NULL&&isTimeout(pLRU)) {
+                removeToNode(pLRU);
+            }
+            return 0;
+        }
+    }
+}
+
+
+int linkMRU(toNode* node) {
+    node->right=pMRU;
+    node->left=NULL;
+    if(pMRU) {
+        pMRU->left=node;
+    }
+    pMRU=node;
+    if(pLRU==NULL)pLRU=node;
+    return 0;
+}
+
+int unlinkNode(toNode* node) {
+    if(node->left) {
+        node->left->right=node->right;
+    } else {
+        pMRU=node->right;
+    }
+    if(node->right) {
+        node->right->left=node->left;
+    } else {
+        pLRU=node->left;
+    }
+    node->left=node->right=NULL;
+
+    return 0;
+}
+
+
+int refreshTimeout(int fd) {
+    if(map_fd_toNode[fd]==NULL) {
+        printf("hashtable error\n");
+        return -1;
+    }
+    toNode* node=map_fd_toNode[fd];
+    node->lastTime=get_time_sec();
+    unlinkNode(node);
+    linkMRU(node);
+    return 0;
+}
+
+void beginSession(session_t* sess) {
     ///把这个命令socket设置为可接受带外数据
 //    activate_oobinline(sess->ctrl_fd);
 
@@ -166,17 +254,28 @@ int handleNewConn(int connfd,struct sockaddr_in* addr) {
     fdt->fd=connfd;
     fdt->type=FDTYPECTRL;
 
-    sessinfo[connfd]={fdt,sess};
+    sessinfo[connfd]= {fdt,sess};
 
 //    addfd(epollfd,connfd,0);
     addFdData(epollfd,connfd,&sessinfo[connfd],0);
     beginSession(sess);
+
+    addtoNode(sess);
+
     printf("有客户端连接到来\n");
 
     return 0;
 }
 
 
+
+int addtoNode(session_t* sess) {
+    long sec=get_time_sec();
+    toNode* node=newToNode(sess,sec);
+    linkMRU(node);
+    map_fd_toNode[sess->ctrl_fd]=node;
+    return 0;
+}
 
 
 int isValid(session_t* sess) {
@@ -190,6 +289,7 @@ int isValid(session_t* sess) {
         closeSess(sess);
         return TOOMANYCONNPERIP;
     }
+    return 0;
 }
 
 void handle_sigchld(int sig) {

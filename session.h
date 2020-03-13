@@ -66,6 +66,16 @@ struct edata_t{
     session_t* sess;
 };
 
+
+struct toNode{
+    session_t* sess;
+    int lastTime;
+    toNode* left;
+    toNode* right;
+};
+
+toNode* newToNode(session_t* sess=NULL,int t=-1,toNode* l=NULL,toNode* r=NULL);
+
 #define FDTYPECTRL 1
 #define FDTYPEDATA 2
 

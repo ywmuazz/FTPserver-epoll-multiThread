@@ -31,24 +31,24 @@ static struct parseconf_uint_setting {
     {NULL,NULL}
 };
 
-static struct parseconf_str_setting{
+static struct parseconf_str_setting {
     const char* p_setting_name;
     const char** p_variable;
-} parseconf_str_array[]={
+} parseconf_str_array[]= {
     {"listen_address",&tunable_listen_address},
     {NULL,NULL},
 };
 
-void parseconf_load_file(const char* path){
+void parseconf_load_file(const char* path) {
     FILE* fp=fopen(path,"r");
     if(fp==NULL)ERR_EXIT("fopen");
-    char setting_line[1024]={0};
+    char setting_line[1024]= {0};
     ///gets读掉'\n'但会改成'\0'，fgets读掉'\n'但不改直接放进字符串中加'\0',
-    while(fgets(setting_line,sizeof(setting_line),fp)!=NULL){
+    while(fgets(setting_line,sizeof(setting_line),fp)!=NULL) {
         printf("line: %s\n",setting_line);
         if(strlen(setting_line)==0||
-           setting_line[0]=='#'||
-           str_all_space(setting_line))
+                setting_line[0]=='#'||
+                str_all_space(setting_line))
             continue;
         str_trim_crlf(setting_line);
         parseconf_load_setting(setting_line);
@@ -62,11 +62,11 @@ void parseconf_load_file(const char* path){
 
 
 
-void parseconf_load_setting(const char* setting){
-    char key[128]={0};
-    char value[128]={0};
+void parseconf_load_setting(const char* setting) {
+    char key[128]= {0};
+    char value[128]= {0};
     str_split(setting,key,value,'=');
-    if(strlen(value)==0){
+    if(strlen(value)==0) {
         ///因为有缺省值 这不做处理
         return;
     }
@@ -74,9 +74,9 @@ void parseconf_load_setting(const char* setting){
     printf("key:%s value:%s\n",key,value);
 
     for(const struct parseconf_str_setting *pstr=parseconf_str_array;
-        pstr->p_setting_name;
-        pstr++){
-        if(strcmp(key,pstr->p_setting_name)==0){
+            pstr->p_setting_name;
+            pstr++) {
+        if(strcmp(key,pstr->p_setting_name)==0) {
             const char** p=pstr->p_variable;
             if(*p)free((char*)p);
             *p=strdup(value);
@@ -85,13 +85,13 @@ void parseconf_load_setting(const char* setting){
     }
 
     for(const struct parseconf_bool_setting *pbool=parseconf_bool_array;
-        pbool->p_setting_name;
-        pbool++){
-        if(strcmp(key,pbool->p_setting_name)==0){
+            pbool->p_setting_name;
+            pbool++) {
+        if(strcmp(key,pbool->p_setting_name)==0) {
             int *p=pbool->p_variable;
             if(strcmp(value,"1")==0)*p=1;
             else if(strcmp(value,"0")==0)*p=0;
-            else{
+            else {
                 //缺省
             }
             return;
@@ -100,9 +100,9 @@ void parseconf_load_setting(const char* setting){
 
 
     for(const struct parseconf_uint_setting *puint=parseconf_uint_array;
-        puint->p_setting_name;
-        puint++){
-        if(strcmp(key,puint->p_setting_name)==0){
+            puint->p_setting_name;
+            puint++) {
+        if(strcmp(key,puint->p_setting_name)==0) {
             unsigned *p=puint->p_variable;
             if(value[0]=='0')*p=str_octal_to_uint(value);
             else *p=atoi(value);

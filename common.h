@@ -44,6 +44,7 @@
 #define MYFTP_CONF "myftpd.conf"
 #define MAX_SESSIONS 1200
 #define MAXEVENTNUM 80
+#define TIMEOUTSEG 2
 #define TOOMANYCONNTOT -1
 #define TOOMANYCONNPERIP -2
 #define STATUS_NONE 0

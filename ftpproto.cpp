@@ -3,7 +3,6 @@
 #include"str.h"
 #include"ftpcodes.h"
 #include"tunable.h"
-#include"privsock.h"
 #include"common.h"
 #include"epoll_util.h"
 
@@ -320,14 +319,14 @@ int list_common(session_t* sess,int detail) {
 
     DIR *dir=opendir(get_file_name(sess->dirfd));//"."
     if(dir==NULL)return 0;
-    printf("dir??:%s\n",get_file_name(dirfd(dir)));
-    printf("成功打开目录:%s\n",get_file_name(sess->dirfd));
+//    printf("dir??:%s\n",get_file_name(dirfd(dir)));
+//    printf("成功打开目录:%s\n",get_file_name(sess->dirfd));
     struct dirent* dt;
     struct stat sbuf;
 
     while((dt=readdir(dir))!=NULL) {
         ///传入路径名 返回
-        printf("路径名:%s\n",dt->d_name);
+//        printf("路径名:%s\n",dt->d_name);
         char path[1024];
         sprintf(path,"%s/%s",get_file_name(sess->dirfd),dt->d_name);
 //        strcpy(path,get_file_name(sess->dirfd));
@@ -1020,6 +1019,7 @@ void* upload_common(void* args) {
     check_abor(sess);
 
 //    start_cmdio_alarm();
+    return NULL;
 }
 
 
